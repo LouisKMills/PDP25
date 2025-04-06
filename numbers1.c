@@ -38,6 +38,15 @@ int main(int argc, char *argv[]) {
 
     printf("I am %d and I received %d from my left neighbour %d\n", rank, leftNumber, left);
 
+    if (rank != 0) {
+        if (myNumber < leftNumber) {
+            printf("Process %d has at least one number out of order.\n", rank);
+            printf("Process %d has now finished.\n", rank);
+        }
+    }
+
+
+
     // Finalize, i.e. clean up MPI env
     MPI_Finalize();
     return 0;
