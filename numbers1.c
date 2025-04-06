@@ -6,7 +6,7 @@ int main(int argc, char *argv[]) {
 
     // hardcoded array of numbers for each process, each process will
     // use its rank to pull its number from the array
-    int numbers[10] = {10, 20, 5, 15, 25};
+    int numbers[5] = {10, 20, 5, 15, 25};
     int myNumber; // this will hold the number for current process
 
     // this will hold the number for left process
@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
     // MPI SEND AND RECEIVE
     // Send my number to the right neighbour
-    MPI_Send(myNumber, 1, MPI_INT, right, 0, MPI_COMM_WORLD);
+    MPI_Send(&myNumber, 1, MPI_INT, right, 0, MPI_COMM_WORLD);
 
     // Receive the number from the left neighbour
     MPI_Recv(&leftNumber, 1, MPI_INT, left, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -44,8 +44,6 @@ int main(int argc, char *argv[]) {
             printf("Process %d has now finished.\n", rank);
         }
     }
-
-
 
     // Finalize, i.e. clean up MPI env
     MPI_Finalize();
