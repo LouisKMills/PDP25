@@ -9,8 +9,8 @@ int main(int argc, char *argv[]) {
     int numbers[5] = {10, 20, 5, 15, 25};
     int myNumber; // this will hold the number for current process
 
-    // this will hold the number for left process
-    int leftNumber; // NOTE: left number will be received using MPI_Send and MPI_Recv
+    // This will hold the value for left process
+    int leftNumber; // NOTE: will be received using MPI_Send and MPI_Recv
 
     // Initialize the MPI environment
     MPI_Init(&argc, &argv);
@@ -23,11 +23,7 @@ int main(int argc, char *argv[]) {
     int left = (rank - 1 + size) % size;
     int right = (rank + 1) % size;
 
-    // Prints a message specifying its rank and its neighbours
-    printf("my left neighbour is %d, I am %d, and my right neighbour is %d\n", left, rank, right);
-
     myNumber = numbers[rank]; // get the number for this process
-    printf("I am %d and my number is %d\n", rank, myNumber);
 
     // MPI SEND AND RECEIVE
     // Send my number to the right neighbour
@@ -36,14 +32,17 @@ int main(int argc, char *argv[]) {
     // Receive the number from the left neighbour
     MPI_Recv(&leftNumber, 1, MPI_INT, left, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-    printf("I am %d and I received %d from my left neighbour %d\n", rank, leftNumber, left);
-
+    // Check if the number received from the left neighbour is less than my number
+    // If it is, then this process has at least one number out of order
+    // rank 0 is considered the "first" process in the ordering, so does not check.
     if (rank != 0) {
         if (myNumber < leftNumber) {
             printf("Process %d has at least one number out of order.\n", rank);
-            printf("Process %d has now finished.\n", rank);
         }
     }
+
+    // This process has no more execution to do.
+    printf("Process %d has now finished.\n", rank); // Print statement as per assignment reqs.
 
     // Finalize, i.e. clean up MPI env
     MPI_Finalize();
