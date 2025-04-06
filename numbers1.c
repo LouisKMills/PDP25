@@ -4,6 +4,11 @@
 int main(int argc, char *argv[]) {
     int rank, size; // rank: current process, size: # of processes
 
+    // hardcoded array of numbers for each process, each process will
+    // use its rank to pull its number from the array
+    int numbers[10] = {10, 20, 5, 15, 25};
+    int myNumber; // this will hold the number for current process
+
     // Initialize the MPI environment
     MPI_Init(&argc, &argv);
     
@@ -18,6 +23,9 @@ int main(int argc, char *argv[]) {
     // Prints a message specifying its rank and its neighbours
     printf("my left neighbour is %d, I am %d, and my right neighbour is %d\n", left, rank, right);
 
+    myNumber = numbers[rank]; // get the number for this process
+    printf("I am %d and my number is %d\n", rank, myNumber);
+    
     // Finalize, i.e. clean up MPI env
     MPI_Finalize();
     return 0;
