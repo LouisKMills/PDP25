@@ -74,10 +74,10 @@ int main(int argc, char *argv[]) {
             int info[2]; // array to store the incoming data
 
             // Receive from process with rank = src
-            MPI_Recv(info, 2, MPI_INT, src, 1, MPI_COMM_WORLD, &status); 
+            MPI_Recv(info, 2, MPI_INT, src, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE); 
             // Note src argument is the sending process
 
-            //If the out of order flag is 
+            //If the out of order flag is set, print that that number was out of order
             if (info[1]) {
                 printf("Process %d has number %d out of order.\n", src, info[0]);
                 ++outOfOrderCount;
