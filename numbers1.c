@@ -2,7 +2,8 @@
     Name: Louis Parry-Mills
     ID: a1774044
         This MPI program identifies out-of-order numbers in a distributed system 
-    of five processes, where each process holds one number from a fixed array. 
+    of five processes, with no central organising process. Processes receive their
+    value from argv.
 */
 
 #include <stdlib.h>
