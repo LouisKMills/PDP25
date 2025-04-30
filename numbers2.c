@@ -7,7 +7,7 @@
     report this to the master process (rank 0).
 */
 
-#include <stdlib.h>    /* for atoi */
+#include <stdlib.h>
 #include <stdio.h>
 #include <mpi.h>
 
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 
             // Receive from process with rank = src
             MPI_Recv(info, 2, MPI_INT, src, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE); 
-            // Note src argument is the sending process
+            // Note: src argument is the sending process
 
             //If the out of order flag is set, print that that number was out of order
             if (info[1]) {
@@ -84,7 +84,6 @@ int main(int argc, char *argv[]) {
         printf("The number of processes holding an out-of-order number is %d.\n",
             outOfOrderCount);
     }
-
 
     // This process is done.
     MPI_Finalize();

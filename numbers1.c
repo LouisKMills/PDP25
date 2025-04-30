@@ -5,7 +5,7 @@
     of five processes, where each process holds one number from a fixed array. 
 */
 
-#include <stdlib.h>    /* for atoi */
+#include <stdlib.h>
 #include <stdio.h>
 #include <mpi.h>
 
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     // This process has no more execution to do.
     printf("Process %d has now finished.\n", rank); // Print statement as per assignment reqs.
 
-    // Finalize, i.e. clean up MPI env
+    // End the process
     MPI_Finalize();
     return 0;
 }
