@@ -33,11 +33,14 @@ int main(int argc, char *argv[]) {
     myNumber = numbers[rank]; // get the number for this process
 
     // MPI SEND AND RECEIVE
-    // Send my number to the right neighbour
-    MPI_Send(&myNumber, 1, MPI_INT, right, 0, MPI_COMM_WORLD);
+    // Send my number to the right neighbour & receive it from my left
+    MPI_Sendrecv(
+        &myNumber, 1, MPI_INT, right, 0,
+        &leftNumber, 1, MPI_INT, left,  0,
+        MPI_COMM_WORLD, MPI_STATUS_IGNORE
+    );
+    // Note: The use of MPI_Sendrecv guarantees no deadlocks.
 
-    // Receive the number from the left neighbour
-    MPI_Recv(&leftNumber, 1, MPI_INT, left, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
     // Check if the number received from the left neighbour is less than my number
     // If it is, then this process has at least one number out of order
