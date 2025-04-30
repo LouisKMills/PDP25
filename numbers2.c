@@ -35,13 +35,6 @@ int main(int argc, char *argv[]) {
 
     myNumber = numbers[rank]; // get the number for this process
 
-    ////// COMMUNICATION TO MASTER PROCESS HERE //////
-    /*
-    1. Send my number to the right neighbour
-
-    2. Receive the number from the left neighbour
-        set flag true/false indiciation 'out of order'*/
-
     // MPI SEND AND RECEIVE
     // Send my number to the right neighbour & receive it from my left
     MPI_Sendrecv(
@@ -50,37 +43,48 @@ int main(int argc, char *argv[]) {
         MPI_COMM_WORLD, MPI_STATUS_IGNORE
     );
 
-    /*3.
+    /* 
+      DIVERT EXECUTION OF MASTER AND WORKERS
     If worker:
         send to master:
-            rank ID
             my number
             out-of-order flag
-
     
     If master:
         Loop over all worker ranks (in order) and for each:
             Receive that worker's report
             If its flag is true, print the message
     */
-   if (rank != 0) {
-        /* 2. worker: decide out‐of‐order, then report to master */
-        int out_of_order = (myNumber < leftNumber) ? 1 : 0;
-        int info[2] = { myNumber, out_of_order };
+    if (rank != 0) {
+        // This process is WORKER
+        // Set a flag for this worker's value is out of order
+        int isOutOfOrder = (myNumber < leftNumber) ? 1 : 0;
+
+        // Pack an array with the number, and whether it is out of order
+        int info[2] = { myNumber, isOutOfOrder};
+
+        // Send to master
         MPI_Send(info, 2, MPI_INT, 0, 1, MPI_COMM_WORLD);
     } else {
-        /* 3. master: collect reports in rank order, print results */
-        int total = 0;
+        // This process is MASTER
+        int outOfOrderCount = 0; //count used in final print statement
+
+        // Loop through sources (in order)
         for (int src = 1; src < size; ++src) {
-            int info[2];
-            MPI_Recv(info, 2, MPI_INT, src, 1, MPI_COMM_WORLD, &status);
+            int info[2]; // array to store the incoming data
+
+            // Receive from process with rank = src
+            MPI_Recv(info, 2, MPI_INT, src, 1, MPI_COMM_WORLD, &status); 
+            // Note src argument is the sending process
+
+            //If the out of order flag is 
             if (info[1]) {
                 printf("Process %d has number %d out of order.\n", src, info[0]);
-                ++total;
+                ++outOfOrderCount;
             }
         }
         printf("The number of processes holding an out-of-order number is %d.\n",
-            total);
+            outOfOrderCount);
     }
 
 
