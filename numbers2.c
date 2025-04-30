@@ -2,10 +2,9 @@
     Name: Louis Parry-Mills
     ID: a1774044
         This MPI program uses a master-worker communication model. 
-    Each of five processes holds a number from a fixed array. Worker processes 
-    (ranks 1–4) determine if their number is out of order (read: less than the
-    number held by their left-hand neighbour) and report this to the master 
-    process (rank 0).
+    Worker processes (ranks 1–4) determine if their number is out of order 
+    (read: less than the number held by their left-hand neighbour) and 
+    report this to the master process (rank 0).
 */
 
 #include <stdlib.h>    /* for atoi */
