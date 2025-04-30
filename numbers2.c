@@ -83,6 +83,8 @@ int main(int argc, char *argv[]) {
                 ++outOfOrderCount;
             }
         }
+
+        // Print the total number of out of order numbers, per assignment spec
         printf("The number of processes holding an out-of-order number is %d.\n",
             outOfOrderCount);
     }
