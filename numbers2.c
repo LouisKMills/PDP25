@@ -35,10 +35,28 @@ int main(int argc, char *argv[]) {
 
     myNumber = numbers[rank]; // get the number for this process
 
-    // This process has no more execution to do.
-    printf("Process %d has now finished.\n", rank); // Print statement as per assignment reqs.
+    ////// COMMUNICATION TO MASTER PROCESS HERE //////
+    /*
+    1. Send my number to the right neighbour
 
-    // Finalize, i.e. clean up MPI env
+    2. Receive the number from the left neighbour
+        set flag true/false indiciation 'out of order'
+
+    3.
+    If worker:
+        send to master:
+            rank ID
+            my number
+            out-of-order flag
+
+    
+    If master:
+        Loop over all worker ranks (in order) and for each:
+            Receive that worker's report
+            If its flag is true, print the message
+    */
+
+    // This process is done.
     MPI_Finalize();
     return 0;
 }
